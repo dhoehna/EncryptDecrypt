@@ -21,8 +21,7 @@ namespace Cosmos
         /// <returns>A guid used to find the record in COMOS</returns>
         public static Guid Upload(string stringToUpload)
         {
-            EncryptionInformation encryptionInformation = new EncryptionInformation();
-            byte[] encryptedData = Encryption.Encrypt(stringToUpload, encryptionInformation);
+            byte[] encryptedData = Encryption.Encrypt(stringToUpload);
             return Upload(encryptedData);
         }
 

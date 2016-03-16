@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Xml.Linq;
+using System.IO;
 
 namespace Cosmos
 {
     public static class Configuration
     {
-        private static byte[] cryptographyKey;
+        private static byte[] cryptographyKey = null;
         public static byte[] CryptographyKey
         {
             get
             {
-                if(DateTime.Now > expirationDate)
+                if(cryptographyKey == null || DateTime.Now > expirationDate)
                 {
-                    KeyVault keyVaultClient = new KeyVault();
-
-                    cryptographyKey = keyVaultClient.GetEncryptionKey("cryptKey");
+                    cryptographyKey = KeyVault.Instance.GetEncryptionKey("cryptKey");
                 }
 
                 return cryptographyKey;
@@ -26,16 +25,14 @@ namespace Cosmos
             }
         }
 
-        private static byte[] authenticationKey;
+        private static byte[] authenticationKey = null;
         public static byte[] AuthenticationKey
         {
             get
             {
-                if(DateTime.Now > expirationDate)
+                if(authenticationKey == null || DateTime.Now > expirationDate)
                 {
-                    KeyVault keyVaultClient = new KeyVault();
-
-                    authenticationKey = keyVaultClient.GetEncryptionKey("authKey");
+                    authenticationKey = KeyVault.Instance.GetEncryptionKey("authKey");
                 }
 
                 return authenticationKey;
@@ -48,6 +45,8 @@ namespace Cosmos
         }
 
         public static DateTime expirationDate { get; private set; }
+
+
         /// <summary>
         /// The URI for the base address for the HttpClient when calling Azure.
         /// Since this application is only calling azure keyvault this should be set to
@@ -107,6 +106,11 @@ namespace Cosmos
 
         private static void LoadConfiguration()
         {
+            if(!File.Exists("Configuration.xml"))
+            {
+                throw new InvalidOperationException("The configuration file does not exist at " + Path.GetFullPath("Configuration.xml"));
+            }
+
             expirationDate = DateTime.Now.AddMinutes(30); //In case one of the keys are referenced before the date is.
             XDocument configuration = XDocument.Load("Configuration.xml");
 
@@ -118,7 +122,7 @@ namespace Cosmos
 
             string clientId = GetValue(configuration, "clientid");
             string clientSecret = GetValue(configuration, "clientsecret");
-            string httpBaseAddress = GetValue(configuration, "httpclientBaseAddress");
+            string httpBaseAddress = GetValue(configuration, "httpclientbaseaddress");
             string keyVaultLocation = GetValue(configuration, "keyvaultlocation");
 
 
@@ -158,7 +162,7 @@ namespace Cosmos
 
         private static string GetValue(XDocument configuration, string elementName)
         {
-            XElement elementOfChoice = configuration.Element("EncryptDecryptConfiguration").Element(elementName);
+            XElement elementOfChoice = configuration.Element("encryptdecryptconfiguration").Element(elementName);
 
             if(elementOfChoice == null)
             {

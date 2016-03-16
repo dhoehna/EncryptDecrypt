@@ -16,10 +16,10 @@ namespace Cosmos
         /// <summary>
         /// Use when there are no keys inm Azure and you need to make the keys for the first time.
         /// </summary>
-        public static EncryptionInformation GetAuthCodes()
-        {
-            return new EncryptionInformation();
-        }
+        //public static EncryptionInformation GetAuthCodes()
+        //{
+        //    return new EncryptionInformation();
+        //}
 
         /// <summary>
         /// Encryptes the passed in string.
@@ -27,9 +27,9 @@ namespace Cosmos
         /// <param name="stringToEncrypt">the string that needs to be encrypted</param>
         /// <param name="encryptionInformation">the keys for the encryption.</param>
         /// <returns>A byte array representation of the encrypted string.</returns>
-        public static byte[] Encrypt(string stringToEncrypt, EncryptionInformation encryptionInformation)
+        public static byte[] Encrypt(string stringToEncrypt)
         {
-            return Encrypt(Encoding.ASCII.GetBytes(stringToEncrypt), encryptionInformation);
+            return Encrypt(Encoding.ASCII.GetBytes(stringToEncrypt));
         }
 
         /// <summary>
@@ -38,15 +38,10 @@ namespace Cosmos
         /// <param name="dataToEncrypt">What needs to be encrypted</param>
         /// <param name="encryptionInformation">The keys for the encryption</param>
         /// <returns>A byte representation of the encrypted byte array.</returns>
-        public static byte[] Encrypt(byte[] dataToEncrypt, EncryptionInformation encryptionInformation)
+        public static byte[] Encrypt(byte[] dataToEncrypt)
         {
-            if (DateTime.Now > encryptionInformation.expirationDate)
-            {
-                encryptionInformation.UpdateKeys();
-            }
-
-            return EncryptionHelper.SimpleEncrypt(dataToEncrypt, encryptionInformation.cryptographyKey,
-                encryptionInformation.authorizationKey);
+            return EncryptionHelper.SimpleEncrypt(dataToEncrypt, Configuration.CryptographyKey,
+                Configuration.AuthenticationKey);
         }
 
         /// <summary>
@@ -55,10 +50,10 @@ namespace Cosmos
         /// <param name="encryptedData">The data to decrypt</param>
         /// <param name="encryptionInformation">THe keys used to decrypt the data.</param>
         /// <returns>Abyte array representation of the decrypted data</returns>
-        public static byte[] Decrypt(byte[] encryptedData, EncryptionInformation encryptionInformation)
+        public static byte[] Decrypt(byte[] encryptedData)
         {
-            return EncryptionHelper.SimpleDecrypt(encryptedData, Configuration.CryptographyLocation,
-                encryptionInformation.authorizationKey);
+            return EncryptionHelper.SimpleDecrypt(encryptedData, Configuration.CryptographyKey,
+                Configuration.AuthenticationKey);
         }
     }
 }

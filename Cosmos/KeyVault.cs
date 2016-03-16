@@ -13,7 +13,28 @@ namespace Cosmos
     /// </summary>
     public class KeyVault
     {
+        /* Singleton pattern comes from http://csharpindepth.com/Articles/General/Singleton.aspx 4th version*/
+        private static readonly KeyVault instance = new KeyVault();
 
+        // Explicit static constructor to tell C# compiler
+        // not to mark type as beforefieldinit
+        static KeyVault() { }
+
+        private KeyVault()
+        {
+            this.vaultLocation = Configuration.KeyVaultAddress;
+            /* The two lines need to be ran in this order.*/
+            this.clientCredentials = new ClientCredential(Configuration.ClientId, Configuration.ClientSecret);
+            this.keyVaultClient = new KeyVaultClient(GetAccessToken, GetHttpClient());
+        }
+
+        public static KeyVault Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
 
         /// <summary>
         /// THe keyVault client used to get ans set keys.
@@ -36,13 +57,6 @@ namespace Cosmos
         /// </summary>
         private const string ENCRYPTION_METHOD = "RSA1_5";
 
-        public KeyVault()
-        {
-            this.vaultLocation = Configuration.KeyVaultAddress;
-            /* The two lines need to be ran in this order.*/
-            this.clientCredentials = new ClientCredential(Configuration.ClientId, Configuration.ClientSecret);
-            this.keyVaultClient = new KeyVaultClient(GetAccessToken, GetHttpClient());
-        }
 
         /// <summary>
         /// Makes a secret in Azure with the name and value.
