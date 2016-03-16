@@ -10,17 +10,7 @@ namespace Cosmos
     /// DLL to be called when informaiton needs to be encrypted or decrypted.
     /// </summary>
     internal class Encryption
-    {
-
-
-        /// <summary>
-        /// Use when there are no keys inm Azure and you need to make the keys for the first time.
-        /// </summary>
-        //public static EncryptionInformation GetAuthCodes()
-        //{
-        //    return new EncryptionInformation();
-        //}
-
+    { 
         /// <summary>
         /// Encryptes the passed in string.
         /// </summary>
