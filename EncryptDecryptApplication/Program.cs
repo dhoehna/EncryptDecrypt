@@ -1,11 +1,6 @@
 ﻿using Cosmos;
-using EncryptDecrypt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EncryptDecryptApplication
 {
@@ -13,23 +8,28 @@ namespace EncryptDecryptApplication
     {
         static void Main(string[] args)
         {
-            //Get the authcodes.
-            EncryptionInformation encryptionInformtion = Encryption.GetAuthCodes();
+            EncryptionInformation information = new EncryptionInformation();
+            Guid identifier = Communication.Upload("Hello, it is me");
+            byte[] stuff = Communication.Download(identifier, information);
 
-            //Encrypt some information.
-            byte[] encryptedString = Encryption.Encrypt("Hello, I have been encrypted before", encryptionInformtion);
+            Console.WriteLine(Encoding.ASCII.GetString(stuff));
+           // //Get the authcodes.
+           // EncryptionInformation encryptionInformtion = Encryption.GetAuthCodes();
 
-            //Upload data to cosmos
-            //CommunicationHelper.Upload(encryptedString);
+           // //Encrypt some information.
+           // byte[] encryptedString = Encryption.Encrypt("Hello, I have been encrypted before", encryptionInformtion);
 
-            Thread.Sleep(2000); /* Sending data to COSMOS*/
+           // //Upload data to cosmos
+           //Guid location = CommunicationHelper.Upload(encryptedString);
 
-            //download data from cosmos
-            //CommunicationHelper.Download("Here is my location");
+           // Thread.Sleep(2000); /* Sending data to COSMOS*/
 
-            byte[] decryptedData = Encryption.Decrypt(encryptedString, encryptionInformtion);
+           // //download data from cosmos
+           // byte[] encryptedData = CommunicationHelper.Download(location);
 
-            Console.WriteLine("Is your message: " + Encoding.ASCII.GetString(decryptedData));
+           // byte[] decryptedData = Encryption.Decrypt(encryptedData, encryptionInformtion);
+
+           // Console.WriteLine("Is your message: " + Encoding.ASCII.GetString(decryptedData));
 
 
 

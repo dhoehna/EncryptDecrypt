@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EncryptDecrypt
+namespace Cosmos
 {
     /// <summary>
     /// Class came from  http://stackoverflow.com/a/10366194/1549689

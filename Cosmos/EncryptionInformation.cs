@@ -1,11 +1,10 @@
-﻿using AzureHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EncryptDecrypt
+namespace Cosmos
 {
     /// <summary>
     /// Holds the keys to decrypt the encrypted data.
@@ -90,7 +89,7 @@ namespace EncryptDecrypt
         /// <param name="cryptographyKey">Crypt key for encrypting and decrypting strings.</param>
         /// <param name="cryptographyLocation">Location in aure for the crypt key</param>
         /// <param name="expirationDate">THe next date that the keys will need to be retrieved from azure.</param>
-        public EncryptionInformation(byte[] authorizationKey, byte[] cryptographyKey, 
+        public EncryptionInformation(byte[] authorizationKey, byte[] cryptographyKey,
                                      DateTime? expirationDate = null)
         {
             this.authorizationKey = authorizationKey;
